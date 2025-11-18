@@ -1013,7 +1013,7 @@ async function sendOrderToTelegram(order) {
   }).join("\n");
 
   // Telegram link to order.html
-  const baseURL = "https://anrachana28-del.github.io/Myhome_shop/"; 
+  const baseURL = "https://anrachana28-del.github.io/home_online/"; 
   const customerID = order.customer.customID || "N/A";
   const orderCode = order.orderCode || "N/A";
   const orderLink = `${baseURL}?customerID=${encodeURIComponent(customerID)}&orderCode=${encodeURIComponent(orderCode)}`;
