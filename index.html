@@ -999,37 +999,28 @@ async function sendOrderToTelegram(order) {
   const botToken = "7654128263:AAG7Bfl_kPF9aOnE0hltHpCGqQlTE1H9wCg";
   const chatId = "6567570219";
 
-  // Prepare items text safely for <pre>
+  // Prepare items text for table display
   const itemsText = order.products.map((p, i) => {
-    const name = p.name.padEnd(25, " ");
+    const maxNameLength = 20;
+    const name = (p.name.length > maxNameLength ? p.name.slice(0, 17) + "..." : p.name).padEnd(maxNameLength, " ");
     const qty = String(p.qty).padStart(2, " ");
     const total = (p.price * p.qty).toFixed(2).padStart(7, " ");
     const rowEmoji = i % 2 === 0 ? "▫️" : "▪️";
-
-    // Escape special characters for Telegram HTML inside <pre>
     const safeName = name.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-    return `${rowEmoji} ${safeName} : ${qty} : $${total} ${rowEmoji}`;
+    return `${rowEmoji} ${safeName} | ${qty} | $${total} ${rowEmoji}`;
   }).join("\n");
 
-  // Telegram link to order.html
-  const baseURL = "https://anrachana28-del.github.io/home_online/"; 
+  // Telegram Web App URL
+  const baseURL = "https://anrachana28-del.github.io/home_online/"; // Host online
   const customerID = order.customer.customID || "N/A";
   const orderCode = order.orderCode || "N/A";
   const orderLink = `${baseURL}?customerID=${encodeURIComponent(customerID)}&orderCode=${encodeURIComponent(orderCode)}`;
 
   // Construct full message
   const text = `
-🧾 <b>ORDER INVOICE</b>
-━━━━━━━━━━━━━━━━━━━━━━
-🆔 <b>User ID:</b> ${customerID}
-👤 <b>Name:</b> ${order.customer.name}
-📞 <b>Phone:</b> ${order.customer.phone}
-🏠 <b>Address:</b> ${order.customer.address}
-📧 <b>Email:</b> ${order.customer.email || "N/A"}
-🔖 <b>Order Code:</b> <a href="${orderLink}">${orderCode}</a>
-────────────────────────────────────
-<b>🛒 Items:</b>
+🔖 <b>Order Code:</b> ${orderCode}
+──────────────────────────────
 <pre>
 ${itemsText}
 </pre>
@@ -1046,7 +1037,12 @@ ${itemsText}
         chat_id: chatId,
         text: text,
         parse_mode: "HTML",
-        disable_web_page_preview: true
+        disable_web_page_preview: true,
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: "View Order", web_app: { url: orderLink } }]
+          ]
+        }
       })
     });
 
