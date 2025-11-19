@@ -1303,17 +1303,25 @@ function isOrderClicked(orderId) {
   return clicked.includes(orderId);
 }
 
-// Show modal with full order info
+// Show modal with colored status
 function showOrderModal(order) {
   const modal = document.getElementById('orderModal');
   const content = document.getElementById('modalContent');
 
+  // ជ្រើស color based on status
+  let statusColor = 'orange'; // default Pending
+  if(order.status === 'Confirmed') statusColor = 'green';
+  else if(order.status === 'Cancelled') statusColor = 'red';
+
   content.innerHTML = `
-    <h3 style="margin-bottom:5px;">Order ${order.orderCode || ''}</h3>
+    <h3>Order ${order.orderCode || ''}</h3>
     <p><b>Customer:</b> ${order.customer.name}</p>
     <p><b>Phone:</b> ${order.customer.phone}</p>
     <p><b>Address:</b> ${order.customer.address}</p>
     <p><b>Email:</b> ${order.customer.email || 'N/A'}</p>
+    <p>Status: <span id="modal-status-${order.id}" style="color:${statusColor}; font-weight:bold;">
+      ${order.status || 'Pending'}
+    </span></p>
     <hr>
     <h4>Items:</h4>
     <div>
@@ -1327,16 +1335,46 @@ function showOrderModal(order) {
           <div style="flex:1; text-align:center;">${qty}</div>
           <div style="flex:1; text-align:right;">$${price.toFixed(2)}</div>
           <div style="flex:1; text-align:right;">$${subtotal.toFixed(2)}</div>
-        </div>
-        `;
+        </div>`;  
       }).join('')}
     </div>
     <hr>
-    <p style="text-align:right; font-weight:bold; font-size:16px;">Total: $${Number(order.total || 0).toFixed(2)}</p>
-    <p style="text-align:right; font-size:12px; color:#555;">${order.createdAt ? order.createdAt.toDate().toLocaleString() : ''}</p>
+    <p style="text-align:right; font-weight:bold;">Total: $${Number(order.total || 0).toFixed(2)}</p>
+    
   `;
+
   modal.style.display = 'flex';
 }
+
+
+// Confirm order from modal
+async function confirmOrder(docPath, customerID, orderCode, orderId, source='modal') {
+  try {
+    await db.doc(docPath).update({ status: "Confirmed" });
+
+    // Update status in modal if called from modal
+    if(source === 'modal'){
+      const statusEl = document.getElementById(`modal-status-${orderId}`);
+      if(statusEl) statusEl.textContent = "Confirmed";
+      alert(`Order ${orderCode} បាន Confirm!`);
+    }
+
+    // Optionally refresh invoice cards in page
+    fetchOrder();
+
+  } catch(err) {
+    console.error(err);
+    alert("Failed to confirm order: " + err.message);
+  }
+}
+
+// Close modal
+function closeModal() {
+  const modal = document.getElementById('orderModal');
+  modal.style.display = 'none';
+}
+
+
 function downloadOrderImage() {
   const modalBox = document.querySelector('#orderModal > div'); // box inside modal
 
