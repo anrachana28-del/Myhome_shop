@@ -10,7 +10,7 @@
 body {
   margin:0;
   font-family:Arial,Khmer OS Battambang;
- background: linear-gradient(to bottom right, #daf6f6e4);
+ background: linear-gradient(to bottom right, #ffffff);
 }
 
 
@@ -33,7 +33,8 @@ header .logo{font-size:20px;font-weight:bold;cursor:pointer;}
 .user-actions{display:flex;align-items:center;gap:10px;}
 .user-actions button{
   background:white;color:#02719d;border:none;border-radius:25px;
-  padding:8px 16px;font-weight:bold;
+  padding:6px 12px;font-weight:bold;
+   font-family:Arial,Khmer OS Battambang;
 }
 .user-actions button:hover{background:#f0f0f0;}
 .cart-icon{position:relative;font-size:22px;cursor:pointer;}
@@ -45,26 +46,26 @@ header .logo{font-size:20px;font-weight:bold;cursor:pointer;}
 
 /* === Filter Bar === */
 .filter-bar{
-  background:#e0f7ff;display:flex;gap:10px;overflow-x:auto;
+  background:#cadada8e;display:flex;gap:10px;overflow-x:auto;
   padding:10px 15px;scrollbar-width:none;
 }
 .filter-bar::-webkit-scrollbar{display:none;}
 .filter-bar button{
-  padding:6px 14px;border:none;border-radius:25px;background:#02719d;color:white;
+  padding:6px 14px;border:none;border-radius:25px; background:linear-gradient(90deg,#3cb9c9b3,#038b50b6);color:rgb(255, 255, 255);
+  font-family:Arial,Khmer OS Battambang;
   white-space:nowrap;font-size:13px;
 }
-.filter-bar button.active,.filter-bar button:hover{background:#005f8d;}
+.filter-bar button.active,.filter-bar button:hover{background:#81828257;}
 
 /* === Product Grid === */
 .grid{
   display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-  gap:15px;padding:15px;
+  gap:8px;padding:15px;
 }
 .card{
   background:white;border-radius:10px;overflow:hidden;
   box-shadow:0 4px 10px rgba(0,0,0,0.1);transition:0.3s;
 }
-.card:hover{transform:scale(1.03);}
 .img-container{height:160px;overflow:hidden;}
 .img-container img{width:100%;height:100%;object-fit:cover;transition:0.3s;}
 .img-container:hover img{transform:scale(1.1);}
@@ -77,7 +78,8 @@ header .logo{font-size:20px;font-weight:bold;cursor:pointer;}
 }
 .buy-btn:hover{background:#005f8d;}
 
-/* === Modal Base === */
+
+.card:hover{transform:scale(1.03);}/* === Modal Base === */
 .modal{
   display:none;position:fixed;top:0;left:0;width:100%;height:100%;
   background:rgba(0,0,0,0.6);justify-content:center;align-items:center;z-index:999;
@@ -227,8 +229,8 @@ header .logo{font-size:20px;font-weight:bold;cursor:pointer;}
   cursor: pointer;
   font-size: 1em;
 }
-.buy-btn {   background:linear-gradient(90deg,#9e9e9e85,#0196c7); }
-.add-btn { background: #03578b; color: #fff; }
+.buy-btn {   background:linear-gradient(90deg,#94939385); }
+.add-btn {background:linear-gradient(90deg,#038b7485,#0c769a); color: #fff;  font-family:Arial,Khmer OS Battambang;}
 .old-price {
   text-decoration: line-through; /* Adds a line through the text */
   color: #888; /* Optional: grey color */
@@ -554,11 +556,11 @@ header .logo{font-size:20px;font-weight:bold;cursor:pointer;}
 <body>
 
 <header>
-  <div class="logo" onclick="goHome()">🛍 MyShop</div>
+  <div class="logo" onclick="goHome()">កាហ្វេក្តៅ</div>
   <div class="search-bar"><input id="searchInput" placeholder="Search products..."></div>
   <div class="user-actions">
     <div class="cart-icon" onclick="openCart()">🛒<span id="cartCount" class="cart-count">0</span></div>
-    <button id="loginBtn" onclick="openAuth()">Login</button>
+    <button id="loginBtn" onclick="openAuth()">ចុះឈ្មោះ</button>
     <img id="profileAvatar" src="" alt="" style="width:32px;height:32px;border-radius:50%;display:none;cursor:pointer;" onclick="openCustomerPage()">
   </div>
 </header>
@@ -566,7 +568,7 @@ header .logo{font-size:20px;font-weight:bold;cursor:pointer;}
 <div id="filterBar" class="filter-bar"></div>
 
 <main id="mainPage">
-  <h3 style="margin-left:15px;">Newest Products</h3>
+  
  
   <div id="productsGrid" class="grid"></div>
 <div id="productView" class="hidden"></div>
@@ -676,6 +678,10 @@ header .logo{font-size:20px;font-weight:bold;cursor:pointer;}
       ⬇️ Download Image
     </button>
 
+
+
+    
+
   </div>
 </div>
 
@@ -713,7 +719,7 @@ header .logo{font-size:20px;font-weight:bold;cursor:pointer;}
     <h3>My Cart</h3>
     <div id="cartItems"></div>
     <div class="cart-total" id="cartTotal">Total: $0</div>
-    <button class="confirm-btn" onclick="openCheckout()">Buy Now</button>
+    <button class="confirm-btn" onclick="openCheckout()">មើលបន្ថែម</button>
   </div>
 </div>
 <!-- Buy Now Modal -->
@@ -755,6 +761,7 @@ header .logo{font-size:20px;font-weight:bold;cursor:pointer;}
 
     </table>
 
+
     <!-- User Info -->
     <div style="margin-bottom:10px;">
       <input type="text" id="buyPhone" placeholder="Enter phone number" 
@@ -795,7 +802,6 @@ header .logo{font-size:20px;font-weight:bold;cursor:pointer;}
   z-index:9999;
   font-size:15px;
 "></div>
-
 
 
 <!-- Firebase -->
@@ -1401,7 +1407,7 @@ function loadProducts(){
 }
 function renderFilters(){
   const types=[...new Set(products.map(p=>p.type).filter(Boolean))];
-  filterBar.innerHTML=''; const allBtn=document.createElement('button'); allBtn.textContent='All'; allBtn.classList.add('active');
+  filterBar.innerHTML=''; const allBtn=document.createElement('button'); allBtn.textContent='ទាំងអស់'; allBtn.classList.add('active');
   allBtn.onclick=()=>{document.querySelectorAll('.filter-bar button').forEach(b=>b.classList.remove('active'));allBtn.classList.add('active'); renderProducts('');};
   filterBar.appendChild(allBtn);
   types.forEach(t=>{const b=document.createElement('button'); b.textContent=t; b.onclick=()=>{document.querySelectorAll('.filter-bar button').forEach(bb=>bb.classList.remove('active'));b.classList.add('active'); renderProducts(t);}; filterBar.appendChild(b);});
@@ -1532,8 +1538,8 @@ async function showProductView(p) {
     <div class="meta">👁 ${views} views</div>
     <div class="desc" style=" font-size:0.95em; color:#706c6c; margin:10px 0 16px; max-height:120px; overflow-y:auto; word-wrap:break-word; white-space:normal; padding-right:4px;">${p.description || 'មិនមានពណ៌នា'}</div>
     <div class="action-btns">
-      <button class="add-btn">🛒 Add to Cart</button>
-      <button class="buy-btn">⚡ Buy Now</button>
+      <button class="add-btn">🛒រក្សាដើម្បីកម្មង់</button>
+      <button class="buy-btn">មើលបន្ថែម</button>
     </div>
   `;
 
@@ -1885,6 +1891,16 @@ searchInput.addEventListener('input',()=>renderProducts(document.querySelector('
 auth.onAuthStateChanged(updateProfileUI);
 loadProducts();
 updateCartCount();
+
+
+
+
+
+
+
+
 </script>
+
+
 </body>
 </html>
